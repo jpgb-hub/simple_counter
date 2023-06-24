@@ -1,50 +1,47 @@
-//import react into the bundle
-import React from "react";
+import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom";
 import PropTypes from 'prop-types';
 
-// include your styles into the webpack bundle
 import "../styles/index.css";
-import{FontAwesomeIcon} from '@fortawesome/react-fontawesome'; {/*importa la libreria font awesome*/}
-import{faClock} from '@fortawesome/free-solid-svg-icons';import { func } from "prop-types";
-{/*importa el ícono desde la librería*/}
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faClock } from '@fortawesome/free-solid-svg-icons';
 
-//program the function//
+function SimpleCounter() {
+  const [counter, setCounter] = useState(0);
+  const [seconds, setSeconds] = useState(0);
+  const [minutes, setMinutes] = useState(0);
+  const [digit, setDigit] = useState(1);
 
-function SimpleCounter(props){
-    return (<div className="Counter">
-        <div className="Clock">
-        {/* <i className="fa-regular fa-clock"></i> */}
-        <FontAwesomeIcon icon={faClock} />{/* se usa el codigo seccion React  */}
-        </div>
-        <div className="fourth_digit">{props.fourth_digit}</div>
-        <div className="third_digit">{props.third_digit}</div>
-        <div className="second_digit">{props.second_digit}</div>
-        <div className="first_digit">{props.first_digit}</div>
-    </div>);
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCounter((prevCounter) => prevCounter + 1);
+    }, 1000);
+
+    return () => {
+      clearInterval(interval);
+    };
+  }, []);
+
+  useEffect(() => {
+    setSeconds(counter % 60);
+    setMinutes(Math.floor(counter / 60));
+    setDigit((counter % 9) + 1);
+  }, [counter]);
+
+  return (
+    <div className="Counter">
+      <div className="Clock">
+        <FontAwesomeIcon icon={faClock} />
+      </div>
+      <div className="fourth_digit">{Math.floor(minutes / 10)}</div>
+      <div className="third_digit">{minutes % 10}</div>
+      <div className="second_digit">{Math.floor(seconds / 10)}</div>
+      <div className="first_digit">{digit}</div>
+    </div>
+  );
 }
 
-SimpleCounter.propTypes ={
-    fourth_digit:PropTypes.number,
-    third_digit:PropTypes.number,
-    second_digit:PropTypes.number,
-    first_digit:PropTypes.number,
-}
+ReactDOM.render(<SimpleCounter />, document.querySelector("#app"));
 
-let counter = 0;
-setInterval(function(){
-    const fourth_digit = Math.floor(counter/1000);
-    const third_digit = Math.floor(counter/100);
-    const second_digit = Math.floor(counter/10);
-    const first_digit = Math.floor(counter/1);
-    console.log(fourth_digit, third_digit,second_digit,first_digit);
-    counter ++; 
-    //render your react application
-    
-    ReactDOM.render(
-        <SimpleCounter first_digit={first_digit} second_digit={second_digit} third_digit={third_digit} fourth_digit={fourth_digit} />, document.querySelector("#app"));
 
-},1000);
-
-//render your react application
 
