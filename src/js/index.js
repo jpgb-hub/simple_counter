@@ -24,7 +24,7 @@ function SimpleCounter() {
 
   useEffect(() => {
     setSeconds(counter % 60);
-    setMinutes(Math.floor(counter / 60));
+    setMinutes(Math.floor(counter / 60)%60);
     setDigit((counter % 9) + 1);
   }, [counter]);
 
@@ -33,15 +33,16 @@ function SimpleCounter() {
       <div className="Clock">
         <FontAwesomeIcon icon={faClock} />
       </div>
-      <div className="fourth_digit">{Math.floor(minutes / 10)}</div>
+      <div className="fourth_digit">{Math.floor(minutes / 10) % 6}</div>
       <div className="third_digit">{minutes % 10}</div>
       <div className="second_digit">{Math.floor(seconds / 10)}</div>
-      <div className="first_digit">{digit}</div>
+      <div className="first_digit">{seconds % 10}</div>
     </div>
   );
 }
 
 ReactDOM.render(<SimpleCounter />, document.querySelector("#app"));
+
 
 
 
